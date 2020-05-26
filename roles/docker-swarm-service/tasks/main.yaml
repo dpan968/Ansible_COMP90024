@@ -1,0 +1,36 @@
+---
+- name: create a public network for better loading balance performance
+  become: yes
+  docker_network:
+    name: mynet
+    driver: overlay
+
+
+
+
+- name: Start a service and manage through swarm 
+  become: yes
+  docker_swarm_service:
+    name: map1
+    image: jiaweiwu/test:map
+    replicas: 2
+    networks: 
+      - mynet
+    env: 
+      DB: '{database_IP}}'
+    publish:
+      - published_port: 8000
+        target_port: 8000
+    
+
+
+
+
+
+
+
+
+  
+
+
+

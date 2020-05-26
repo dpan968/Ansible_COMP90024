@@ -1,0 +1,21 @@
+{
+  "_id": "_design/abc",
+  "views": {
+    "testView2": {
+      "map": "function(doc) {\n  var result = [0,0];\n  var coordinates = doc.place.bounding_box.coordinates\n  for(var i = 0, len = coordinates[0].length; i < len; i++){\n  \n  result[0] += coordinates[0][i][0]\n  result[1] += coordinates[0][i][1]\n\n}\nresult[0] = Math.round(result[0]/4)\nresult[1] = Math.round(result[1]/4)\n  emit(result,1);\n  \n}",
+      "reduce": "_sum"
+    },
+    "view": {
+      "map": "function(doc) {\n  var result = [0,0];\n  var coordinates = doc.place.bounding_box.coordinates\n  for(var i = 0, len = coordinates[0].length; i < len; i++){\n  \n  result[0] += coordinates[0][i][0]\n  result[1] += coordinates[0][i][1]\n\n}\nresult[0] = Math.round(result[0]/4)\nresult[1] = Math.round(result[1]/4)\n  emit([result,doc.lang],1);\n  \n}",
+      "reduce": "_count"
+    },
+    "language": {
+      "reduce": "_count",
+      "map": "function(doc) {\n  var language = \"en\"\n  var result = [0,0];\n  var coordinates = doc.place.bounding_box.coordinates\n  for(var i = 0, len = coordinates[0].length; i < len; i++){\n  \n  result[0] += coordinates[0][i][0]\n  result[1] += coordinates[0][i][1]\n\n}\nresult[0] = Math.round(result[0]/4)\nresult[1] = Math.round(result[1]/4)\n\nif(doc.lang == \"en\"){\n  language = \"en\"\n}else{\n  language = \"ot\"\n}\n  emit([language,result],1);\n  \n}"
+    },
+    "new-view": {
+      "reduce": "_count",
+      "map": "function(doc) {\n  var language = \"en\"\n  var result = [0,0];\n  var coordinates = doc.place.bounding_box.coordinates\n  for(var i = 0, len = coordinates[0].length; i < len; i++){\n  \n  result[0] += coordinates[0][i][0]\n  result[1] += coordinates[0][i][1]\n\n}\nresult[0] = Math.round(result[0]/4)\nresult[1] = Math.round(result[1]/4)\n\nif(doc.lang == \"en\"){\n  language = \"en\"\n  emit([language,result],1);\n}else if (doc.lang == \"fr\"){\n  language = \"fr\"\n  emit([language,result],1);\n}else if(doc.lang == \"zh\"){\n  language = \"zh\"\n  emit([language,result],1);\n}else if(doc.lang == \"ja\"){\n  language = \"ja\"\n  emit([language,result],1);\n}\n\n}"
+    }
+  }
+}

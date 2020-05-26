@@ -1,0 +1,41 @@
+
+- hosts: localhost
+  vars_files:
+    - host_vars/main.yaml
+  gather_facts: true
+
+  roles:
+    - role: openstack-common
+    - role: openstack-security-group
+    - role: openstack-instance
+ 
+  
+
+- hosts: Allusers
+  vars_files:
+    - host_vars/main.yaml
+  gather_facts: true
+  roles:
+    - role: openstack-proxy-setup
+    - role: docker-common-couchdb
+    - role: docker-installation
+    - role: docker-proxy-setup
+    - role: docker-pull-image-couchdb
+    - role: docker-create-container-couchdb
+    - role: couchdb-setup
+
+
+- hosts: "{{groups['all'][0]}}"
+  gather_facts: true
+  roles:
+    - role: couchdb-run-crawler 
+
+
+- hosts: localhost
+  vars_files:
+    - host_vars/main.yaml
+  gather_facts: true
+  roles:
+   - role: couchdb-build-replicate
+   
+ 

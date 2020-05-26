@@ -1,0 +1,39 @@
+- hosts: localhost
+  vars_files:
+    - host_vars/main.yaml
+  gather_facts: true
+
+  roles:
+    - role: openstack-common
+    - role: openstack-security-group
+    - role: openstack-instance
+ 
+  
+
+- hosts: Allusers
+  vars_files:
+    - host_vars/main.yaml
+  gather_facts: true
+  roles:
+      - role: openstack-proxy-setup
+      - role: docker-common
+      - role: docker-installation
+      - role: docker-proxy-setup
+      - role: docker-pull-image
+     
+
+- hosts: "{{groups['all'][0]}}"
+  gather_facts: true
+  roles:
+      - role: docker-init-swarm
+
+- hosts: "{{groups['all'][1]}}"
+  gather_facts: true
+  roles:
+      - role: docker-join-swarm
+
+- hosts: "{{groups['all'][0]}}"
+  gather_facts: true
+  roles:
+      - role: docker-swarm-service
+

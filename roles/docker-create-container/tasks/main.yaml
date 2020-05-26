@@ -1,0 +1,23 @@
+---
+- name: Create a docker container from existing images
+  become: yes
+  docker_container:
+    name: location
+    image: jiaweiwu/test:map
+    ports:
+      - "8000:8000"
+    timeout: 300
+    state: started
+
+- name: Show all the containers
+  become: yes
+  shell: docker ps -a
+  register: showallcontainers
+
+- debug:
+    var: showallcontainers
+
+  
+
+
+

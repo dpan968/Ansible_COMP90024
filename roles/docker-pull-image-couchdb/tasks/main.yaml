@@ -1,0 +1,13 @@
+---
+- name: Pull an image of couchdb
+  become: yes
+  docker_image:
+    name: couchdb
+    source: pull
+
+   
+
+  
+
+
+

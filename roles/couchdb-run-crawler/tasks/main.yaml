@@ -1,0 +1,10 @@
+---
+
+- name: Start crawler.py at background using nohup
+  become: yes
+  shell: nohup python3 streamCrawler.py &
+ 
+
+
+- debug:
+    msg: "Remote node {{ groups['all'][0]  }} is running streamCrawler on the background."

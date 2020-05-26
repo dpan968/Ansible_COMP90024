@@ -1,0 +1,52 @@
+---
+- name: Leave a swarm if has joined any
+  become: yes
+  docker_swarm:
+    state: absent
+    force: yes
+    
+
+
+
+- debug:
+    msg: 
+      "The manager&lead is {{groups['all'][0]}}"
+
+- debug:
+    msg: 
+      "Another manager is {{groups['all'][1]}}"
+
+- debug:
+    msg: 
+      "The Manager join token is {{hostvars[groups['all'][0]]['swarm_info']['swarm_facts']['JoinTokens']['Manager']}}"
+
+
+
+
+- name: Join the existing swarm
+  become: yes
+  docker_swarm:
+    state: join
+    advertise_addr: "{{groups['all'][1]}}"
+    join_token: "{{hostvars[groups['all'][0]]['swarm_info']['swarm_facts']['JoinTokens']['Manager']}}"
+    remote_addrs: "{{groups['all'][0]}}"
+    timeout: 300
+
+
+- name: Display current nodes
+  become: yes
+  shell: docker node ls
+  register: current_nodes
+
+
+- debug:
+    msg: 
+      "{{current_nodes['stdout_lines']}}"
+
+
+
+
+  
+
+
+

@@ -1,0 +1,33 @@
+---
+- name: Leave a swarm if has joined any
+  become: yes
+  docker_swarm:
+    state: absent
+    force: yes
+    
+
+- name: Initialize a swarm
+  become: yes
+  docker_swarm:
+    state: present
+    advertise_addr: "{{groups['all'][0]}}"
+
+
+- name: Get swarm information
+  become: yes
+  docker_swarm_info:
+    nodes: yes
+  register: swarm_info
+  
+- debug:
+    msg: 
+      "{{swarm_info['swarm_facts']['JoinTokens']}}"
+
+
+
+
+
+  
+
+
+
